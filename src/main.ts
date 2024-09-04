@@ -50,7 +50,9 @@ const main = async () => {
         }
         //出力
         for (const responseEvent of responseEvents) {
-          await sleep(1000);
+          while (Math.floor(Date.now() / 1000) < responseEvent.created_at) {
+            await sleep(200);
+          }
           Promise.any(pool.publish(relayUrls, responseEvent));
         }
       },
