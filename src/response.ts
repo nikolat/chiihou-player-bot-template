@@ -1,14 +1,7 @@
-import type {
-  EventTemplate,
-  NostrEvent,
-  VerifiedEvent,
-} from 'nostr-tools/pure';
+import type { EventTemplate, NostrEvent, VerifiedEvent } from 'nostr-tools/pure';
 import { getTagsReply, Signer } from './utils.js';
 
-export const getResponseEvent = async (
-  event: NostrEvent,
-  signer: Signer,
-): Promise<VerifiedEvent | null> => {
+export const getResponseEvent = async (event: NostrEvent, signer: Signer): Promise<VerifiedEvent | null> => {
   if (event.pubkey === signer.getPublicKey()) {
     //自分自身の投稿には反応しない
     return null;
@@ -22,13 +15,9 @@ export const getResponseEvent = async (
 
 let tsumo: string;
 
-const selectResponse = async (
-  event: NostrEvent,
-): Promise<EventTemplate | null> => {
+const selectResponse = async (event: NostrEvent): Promise<EventTemplate | null> => {
   let content: string;
-  const m = event.content.match(
-    /NOTIFY\s(\S+)\s?(\S+)?\s?(\S+)?\s?(\S+)?\s?(\S+)?/,
-  );
+  const m = event.content.match(/NOTIFY\s(\S+)\s?(\S+)?\s?(\S+)?\s?(\S+)?\s?(\S+)?/);
   if (m !== null) {
     const command = m[1];
     switch (command) {
@@ -65,11 +54,7 @@ const selectResponse = async (
     return null;
   } else if (/GET\ssutehai\?$/s.test(event.content)) {
     content = `sutehai? sutehai ${tsumo}`;
-  } else if (
-    /GET\snaku\?\s(((ron|kan|pon|chi)\s)*(ron|kan|pon|chi))$/s.test(
-      event.content,
-    )
-  ) {
+  } else if (/GET\snaku\?\s(((ron|kan|pon|chi)\s)*(ron|kan|pon|chi))$/s.test(event.content)) {
     content = 'naku? no';
   } else {
     return null;

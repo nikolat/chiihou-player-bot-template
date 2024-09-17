@@ -3,12 +3,7 @@ import { SimplePool, useWebSocketImplementation } from 'nostr-tools/pool';
 import * as nip19 from 'nostr-tools/nip19';
 import WebSocket from 'ws';
 import { setTimeout as sleep } from 'node:timers/promises';
-import {
-  getPlayerSignerMap,
-  mahjongChannelId,
-  mahjongServerPubkey,
-  relayUrls,
-} from './config.js';
+import { getPlayerSignerMap, mahjongChannelId, mahjongServerPubkey, relayUrls } from './config.js';
 import { getResponseEvent } from './response.js';
 useWebSocketImplementation(WebSocket);
 
@@ -29,12 +24,7 @@ const main = async () => {
       async onevent(event) {
         const responseEvents: VerifiedEvent[] = [];
         const targetPubkeys = new Set(
-          event.tags
-            .filter(
-              (tag) =>
-                tag.length >= 2 && tag[0] === 'p' && signerMap.has(tag[1]),
-            )
-            .map((tag) => tag[1]),
+          event.tags.filter((tag) => tag.length >= 2 && tag[0] === 'p' && signerMap.has(tag[1])).map((tag) => tag[1]),
         );
         for (const pubkey of targetPubkeys) {
           let rs: VerifiedEvent | null;
@@ -80,9 +70,7 @@ const main = async () => {
       content: `nostr:${nip19.npubEncode(mahjongServerPubkey)} ${command}`,
       created_at: Math.floor(Date.now() / 1000),
     };
-    await Promise.any(
-      pool.publish(relayUrls, signer.finishEvent(templateEvent)),
-    );
+    await Promise.any(pool.publish(relayUrls, signer.finishEvent(templateEvent)));
     i++;
     await sleep(1000);
   }

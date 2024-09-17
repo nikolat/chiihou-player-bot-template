@@ -4,7 +4,9 @@
   "description": "mahjong bot",
   "main": "index.js",
   "scripts": {
-    "dev": "node --import \"data:text/javascript,import { register } from 'node:module'; import { pathToFileURL } from 'node:url'; register('ts-node/esm', pathToFileURL('./'));\" ./src/main.ts"
+    "dev": "node --import \"data:text/javascript,import { register } from 'node:module'; import { pathToFileURL } from 'node:url'; register('ts-node/esm', pathToFileURL('./'));\" ./src/main.ts",
+    "format": "prettier --write .",
+    "start": "node ./dist/main.js"
   },
   "author": "",
   "license": "CC0-1.0",
@@ -14,6 +16,7 @@
   },
   "devDependencies": {
     "@types/ws": "^8.5.12",
+    "prettier": "^3.3.3",
     "ts-node": "^10.9.2"
   },
   "type": "module"
